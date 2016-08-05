@@ -14,16 +14,18 @@ function onRoute(req, res, next) {
   //extract token and search for match in links collections
   const link = Links.findOne({ token: req.params.token });
 
-
   if (link) {
-    //if link obj found, redirect user there
-    res.writeHead(307, { 'Location': link.utl });
+    //if link obj found,
+    //increment count
+    Links.update(link, { $inc: { clicks: 1}});
+    // now redirect user there
+    res.writeHead(307, { 'Location': link.url });
     res.end();
   }
   else {
     //if no link obj, send user thru to app
     next();
-    
+
   }
 }
 
